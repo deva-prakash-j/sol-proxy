@@ -8,6 +8,7 @@ import com.proxy.client.SolscanClient;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -23,8 +24,9 @@ public class ProxyController {
             @RequestParam(required = false, defaultValue = "1") Integer page,
             @RequestParam(required = false, defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String fromAmount,
-            @RequestParam(required = false) String toAmount) {
-        return solscanClient.getTokenHolders(address, page, pageSize, fromAmount, toAmount);
+            @RequestParam(required = false) String toAmount,
+            @RequestHeader String authorization) {
+        return solscanClient.getTokenHolders(address, page, pageSize, fromAmount, toAmount, authorization);
     }
     
 }

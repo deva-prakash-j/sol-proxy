@@ -22,7 +22,7 @@ public class SolscanClient {
     private final WebClient webClient;
 
     public String getTokenHolders(String address, Integer page, Integer pageSize, String fromAmount,
-            String toAmount) {
+            String toAmount, String token) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                     .path(tokenHolders)
@@ -32,6 +32,11 @@ public class SolscanClient {
                     .queryParamIfPresent("fromAmount", Optional.ofNullable(fromAmount))
                     .queryParamIfPresent("toAmount", Optional.ofNullable(toAmount))
                     .build())
+                .headers(headers -> {
+                    if (token != null && !token.trim().isEmpty()) {
+                        headers.set("token", token);
+                    }
+                })
                 .retrieve()
                 .onStatus(status -> status.value() == 429, RateLimiter::handleRateLimiting)
                 .bodyToMono(String.class)
