@@ -13,8 +13,9 @@ public class BeanConfig {
     private String baseUrl;
 
     @Bean
-    public WebClient webClient(WebClient.Builder builder) {
-        return builder.baseUrl(baseUrl)
+    public WebClient webClient() {
+        return WebClient.builder()
+                .baseUrl(baseUrl)
                 .exchangeStrategies(ExchangeStrategies.builder()
                         .codecs(configurer -> configurer.defaultCodecs()
                                 .maxInMemorySize(1024 * 1024 * 10)) // 10MB

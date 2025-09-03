@@ -1,6 +1,6 @@
 # Multi-stage build for optimized Spring Boot application
 # Build stage  
-FROM gradle:latest AS builder
+FROM gradle:8.14-jdk21 AS builder
 
 # Set working directory
 WORKDIR /app
@@ -9,17 +9,20 @@ WORKDIR /app
 COPY build.gradle settings.gradle gradlew ./
 COPY gradle gradle
 
+# Temporarily modify build.gradle to use Java 21 for Docker build
+RUN sed -i 's/languageVersion = JavaLanguageVersion.of(24)/languageVersion = JavaLanguageVersion.of(21)/' build.gradle
+
 # Download dependencies (this layer will be cached if dependencies don't change)
 RUN gradle dependencies --no-daemon
 
 # Copy source code
 COPY src src
 
-# Build the application
+# Build the application  
 RUN gradle bootJar --no-daemon
 
 # Runtime stage
-FROM openjdk:24-jre-slim
+FROM eclipse-temurin:21-jre
 
 # Add labels for better maintainability
 LABEL description="Sol Proxy Spring Boot Application"
