@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: sol-proxy
+
+solscan:
+  api:
+    baseUrl: https://pro-api.solscan.io/v2.0
+    token:
+      holders: /token/holders
